@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/08 19:27:16 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:05:45 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ int	read_fd(t_list **lst, t_list **cur, int fd)
 int	get_line(char **dst, t_list *node)
 {
 	char	*result;
-	size_t	m_size;
-	size_t	index;
+	ssize_t	m_size;
+	ssize_t	index;
 
 	m_size = line_len(*dst, 0, 0) + line_len(node->buffer, node->offset, 1);
 	result = ft_calloc(m_size + 1, sizeof(char));
 	if (result == NULL)
 		return (ERROR);
 	index = 0;
-	while (*dst != NULL && *dst[index])
+	while (*dst != NULL && index < node->read_size)
 	{
-		result[index] = *dst[index];
+		result[index] = (*dst)[index];
 		index++;
 	}
 	while (index < m_size && node->offset < BUFFER_SIZE)
@@ -56,7 +56,10 @@ int	get_line(char **dst, t_list *node)
 char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list *cur)
 {
 	if (cur != NULL)
+	{
 		remove_node(lst, cur);
+		cur = NULL;
+	}
 	if (result == ERROR)
 		return (NULL);
 	return (str);
@@ -92,8 +95,11 @@ char	*get_next_line(int fd)
 			result = get_line(&read_line, cur);
 		if (result != SUCCESS)
 			return (fail_to_get_line(&read_line));
-		if (cur->offset == cur->read_size)
+		if (cur->offset == cur->read_size - 1)
+		{
 			remove_node(&lst, cur);
+			cur = NULL;
+		}
 	}
 	return (read_line);
 }
