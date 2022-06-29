@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/24 20:05:45 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/06/29 16:54:28 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int	get_line(char **dst, t_list *node)
 	if (result == NULL)
 		return (ERROR);
 	index = 0;
-	while (*dst != NULL && index < node->read_size)
+	while (*dst != NULL && (*dst)[index] != '\0')
 	{
 		result[index] = (*dst)[index];
 		index++;
 	}
-	while (index < m_size && node->offset < BUFFER_SIZE)
+	while (index < m_size && node->offset < node->read_size)
 	{
 		result[index] = node->buffer[node->offset];
 		node->offset++;
@@ -53,13 +53,10 @@ int	get_line(char **dst, t_list *node)
 	return (SUCCESS);
 }
 
-char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list *cur)
+char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list **cur)
 {
-	if (cur != NULL)
-	{
+	if (*cur != NULL)
 		remove_node(lst, cur);
-		cur = NULL;
-	}
 	if (result == ERROR)
 		return (NULL);
 	return (str);
@@ -89,17 +86,14 @@ char	*get_next_line(int fd)
 		{
 			result = read_fd(&lst, &cur, fd);
 			if (result != SUCCESS)
-				return (fail_to_read_fd(result, read_line, &lst, cur));
+				return (fail_to_read_fd(result, read_line, &lst, &cur));
 		}
 		if (cur->offset != cur->read_size)
 			result = get_line(&read_line, cur);
 		if (result != SUCCESS)
 			return (fail_to_get_line(&read_line));
-		if (cur->offset == cur->read_size - 1)
-		{
-			remove_node(&lst, cur);
-			cur = NULL;
-		}
+		if (cur->offset >= cur->read_size - 1)
+			remove_node(&lst, &cur);
 	}
 	return (read_line);
 }
