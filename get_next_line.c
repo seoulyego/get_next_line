@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/29 19:01:27 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/06/29 19:12:35 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,20 @@ char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list **cur)
 	return (str);
 }
 
-char	*fail_to_get_line(char **str)
+char	*fail_to_get_line(t_list **lst, char **str)
 {
+	t_list	*cur;
+
+	if (*lst != NULL)
+	{
+		cur = *lst;
+		while (cur != NULL)
+		{
+			*lst = cur->next;
+			free(cur);
+			cur = *lst;
+		}
+	}
 	if (*str != NULL)
 		free(*str);
 	return (NULL);
@@ -91,7 +103,7 @@ char	*get_next_line(int fd)
 		if (cur->offset != cur->read_size)
 			result = get_line(&read_line, cur);
 		if (result != SUCCESS)
-			return (fail_to_get_line(&read_line));
+			return (fail_to_get_line(&lst, &read_line));
 		if (cur->offset >= cur->read_size - 1)
 			remove_node(&lst, &cur);
 	}

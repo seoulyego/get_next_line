@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:58 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/29 19:01:21 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/06/29 19:09:15 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ ssize_t	nl_in_buffer(char *buffer, ssize_t size);
 int		read_fd(t_list **lst, t_list **cur, int fd);
 int		get_line(char **dst, t_list *node);
 char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list **cur);
-char	*fail_to_get_line(char **str);
+char	*fail_to_get_line(t_list **lst, char **str);
 char	*get_next_line(int fd);
 
 #endif
