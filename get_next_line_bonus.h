@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:58 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/29 19:11:50 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/11 15:35:59 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
 # endif
+
 # define SUCCESS 1
 # define NO_NL -1
 # define NO_READ -2
