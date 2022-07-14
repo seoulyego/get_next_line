@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/29 19:12:51 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/14 15:22:56 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*get_next_line(int fd)
 			result = get_line(&read_line, cur);
 		if (result != SUCCESS)
 			return (fail_to_get_line(&lst, &read_line));
-		if (cur->offset >= cur->read_size - 1)
+		if (cur->offset >= cur->read_size)
 			remove_node(&lst, &cur);
 	}
 	return (read_line);

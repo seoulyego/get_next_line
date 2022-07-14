@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 17:50:42 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/24 20:01:18 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/11 20:18:50 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	check_leaks(void)
 
 int	main(void)
 {
-	int fd = open("gnl.txt", O_RDONLY);
+	int fd = open("variable_nls.txt", O_RDONLY);
 	char *str;
 
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	str = get_next_line(fd);
 	while (str)
 	{
@@ -32,5 +32,6 @@ int	main(void)
 		free(str);
 		str = get_next_line(fd);
 	}
+	close(fd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:10:02 by yeongo            #+#    #+#             */
-/*   Updated: 2022/06/29 19:01:36 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/14 15:28:12 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,9 @@ size_t	line_len(char *str, size_t offset, int nl_check)
 	length = 0;
 	while (str[offset + length])
 	{
-		length++;
 		if (nl_check && str[offset + length] == '\n')
-		{
-			length++;
-			break ;
-		}
+			return (length + 1);
+		length++;
 	}
 	return (length);
 }
