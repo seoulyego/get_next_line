@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:10:02 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/11 20:04:08 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/20 09:11:28 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,35 +28,17 @@ size_t	line_len(char *str, size_t offset, int nl_check)
 	return (length);
 }
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	unsigned char	*tmp;
-	size_t			m_size;
-	size_t			index;
-
-	m_size = count * size;
-	tmp = malloc(m_size);
-	if (tmp == NULL)
-		return (NULL);
-	index = 0;
-	while (index < m_size)
-	{
-		tmp[index] = 0;
-		index++;
-	}
-	return (tmp);
-}
-
 t_list	*ft_lstadd_back(t_list **lst, int fd)
 {
 	t_list	*new_node;
 	t_list	*cur;
 
-	new_node = ft_calloc(1, sizeof(t_list));
+	new_node = malloc(sizeof(t_list));
 	if (new_node == NULL)
 		return (NULL);
 	new_node->read_fd = fd;
 	new_node->read_size = NO_READ;
+	new_node->offset = 0;
 	new_node->next = NULL;
 	if (*lst == NULL)
 	{

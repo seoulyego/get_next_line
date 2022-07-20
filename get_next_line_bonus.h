@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:58 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/11 15:35:59 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/20 09:11:35 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ struct s_list
 };
 
 size_t	line_len(char *str, size_t offset, int nl_check);
-void	*ft_calloc(size_t count, size_t size);
 t_list	*ft_lstadd_back(t_list **lst, int fd);
 t_list	*remove_node(t_list **lst, t_list **node_ref);
 ssize_t	nl_in_buffer(char *buffer, ssize_t size);

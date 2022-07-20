@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/14 15:28:31 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/20 09:13:42 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	read_fd(t_list **lst, t_list **cur, int fd)
 		return (ERROR);
 	else if ((*cur)->read_size == 0)
 		return (READ_EOF);
+	(*cur)->buffer[(*cur)->read_size] = '\0';
 	return (SUCCESS);
 }
 
@@ -32,7 +33,7 @@ int	get_line(char **dst, t_list *node)
 	ssize_t	index;
 
 	m_size = line_len(*dst, 0, 0) + line_len(node->buffer, node->offset, 1);
-	result = ft_calloc(m_size + 1, sizeof(char));
+	result = malloc(sizeof(char) * (m_size + 1));
 	if (result == NULL)
 		return (ERROR);
 	index = 0;
@@ -47,6 +48,7 @@ int	get_line(char **dst, t_list *node)
 		node->offset++;
 		index++;
 	}
+	result[index] = '\0';
 	if (*dst != NULL)
 		free(*dst);
 	*dst = result;
