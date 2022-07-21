@@ -6,11 +6,64 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/21 20:13:24 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/21 20:53:23 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+t_list	*ft_lstadd_back(t_list **lst, int fd)
+{
+	t_list	*new_node;
+	t_list	*cur;
+
+	new_node = malloc(sizeof(t_list));
+	if (new_node == NULL)
+		return (NULL);
+	new_node->read_fd = fd;
+	new_node->read_size = NO_READ;
+	new_node->offset = 0;
+	new_node->next = NULL;
+	if (*lst == NULL)
+	{
+		*lst = new_node;
+		return (new_node);
+	}
+	cur = *lst;
+	while (cur->next != NULL)
+		cur = cur->next;
+	cur->next = new_node;
+	return (new_node);
+}
+
+t_list	*remove_node(t_list **lst, t_list **node_ref)
+{
+	t_list	*cur;
+	t_list	*tmp;
+
+	cur = *lst;
+	if (cur != NULL && cur == *node_ref)
+	{
+		*lst = cur->next;
+		free(cur);
+		cur = *lst;
+		*node_ref = NULL;
+	}
+	while (cur != NULL && cur->next != NULL)
+	{
+		if (cur->next == *node_ref)
+		{
+			tmp = cur->next->next;
+			free(cur->next);
+			cur->next = tmp;
+			*node_ref = NULL;
+			break ;
+		}
+		else
+			cur = cur->next;
+	}
+	return (*lst);
+}
 
 int	read_fd(t_list **lst, t_list **cur, int fd)
 {
@@ -55,34 +108,6 @@ int	get_line(char **dst, t_list *node)
 	return (SUCCESS);
 }
 
-char	*fail_to_read_fd(int result, char *str, t_list **lst, t_list **cur)
-{
-	if (*cur != NULL)
-		remove_node(lst, cur);
-	if (result == ERROR)
-		return (NULL);
-	return (str);
-}
-
-char	*fail_to_get_line(t_list **lst, char **str)
-{
-	t_list	*cur;
-
-	if (*lst != NULL)
-	{
-		cur = *lst;
-		while (cur != NULL)
-		{
-			*lst = cur->next;
-			free(cur);
-			cur = *lst;
-		}
-	}
-	if (*str != NULL)
-		free(*str);
-	return (NULL);
-}
-
 char	*get_next_line(int fd)
 {
 	static t_list	*lst;
@@ -110,7 +135,7 @@ char	*get_next_line(int fd)
 			if (result != SUCCESS)
 				return (fail_to_get_line(&lst, &read_line));
 		}
-		else
+		if (cur->offset >= cur->read_size)
 			remove_node(&lst, &cur);
 	}
 	return (read_line);
