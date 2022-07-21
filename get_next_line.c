@@ -6,7 +6,7 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:09:54 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/20 09:13:42 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/21 20:17:21 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	get_line(char **dst, t_list *node)
 	ssize_t	m_size;
 	ssize_t	index;
 
-	m_size = line_len(*dst, 0, 0) + line_len(node->buffer, node->offset, 1);
+	m_size = line_len(*dst, 0) + line_len(node->buffer, node->offset);
 	result = malloc(sizeof(char) * (m_size + 1));
 	if (result == NULL)
 		return (ERROR);
@@ -94,7 +94,9 @@ char	*get_next_line(int fd)
 	read_line = NULL;
 	while (cur != NULL && cur->read_fd != fd)
 		cur = cur->next;
-	while (nl_in_buffer(read_line, line_len(read_line, 0, 1)) == NO_NL)
+	if (read(fd, NULL, 0) == -1)
+		return (fail_to_read_fd(ERROR, read_line, &lst, &cur));
+	while (nl_in_buffer(read_line) == NO_NL)
 	{
 		if (cur == NULL)
 		{
@@ -102,11 +104,13 @@ char	*get_next_line(int fd)
 			if (result != SUCCESS)
 				return (fail_to_read_fd(result, read_line, &lst, &cur));
 		}
-		if (cur->offset != cur->read_size)
+		if (cur->offset < cur->read_size)
+		{
 			result = get_line(&read_line, cur);
-		if (result != SUCCESS)
-			return (fail_to_get_line(&lst, &read_line));
-		if (cur->offset >= cur->read_size)
+			if (result != SUCCESS)
+				return (fail_to_get_line(&lst, &read_line));
+		}
+		else
 			remove_node(&lst, &cur);
 	}
 	return (read_line);

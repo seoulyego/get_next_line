@@ -6,25 +6,23 @@
 /*   By: yeongo <yeongo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:10:02 by yeongo            #+#    #+#             */
-/*   Updated: 2022/07/20 09:12:23 by yeongo           ###   ########.fr       */
+/*   Updated: 2022/07/21 20:17:51 by yeongo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	line_len(char *str, size_t offset, int nl_check)
+size_t	line_len(char *str, size_t offset)
 {
 	size_t	length;
 
 	if (str == NULL)
 		return (0);
 	length = 0;
-	while (str[offset + length])
-	{
-		if (nl_check && str[offset + length] == '\n')
-			return (length + 1);
+	while (str[offset + length] && str[offset + length] != '\n')
 		length++;
-	}
+	if (str[offset + length] == '\n')
+		return (length + 1);
 	return (length);
 }
 
@@ -81,14 +79,14 @@ t_list	*remove_node(t_list **lst, t_list **node_ref)
 	return (*lst);
 }
 
-ssize_t	nl_in_buffer(char *buffer, ssize_t size)
+ssize_t	nl_in_buffer(char *buffer)
 {
 	ssize_t	index;
 
-	if (buffer == NULL || size == 0)
+	if (buffer == NULL)
 		return (NO_NL);
 	index = 0;
-	while (index < size)
+	while (buffer[index])
 	{
 		if (buffer[index] == '\n')
 			return (index);
